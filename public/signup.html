@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SoulLog - Sign Up</title>
+    <link rel="stylesheet" href="styles/signup.css" />
+  </head>
+  <body>
+    <!-- Glowing floating blobs -->
+    <div class="glow"></div>
+    <div class="glow"></div>
+    <div class="glow"></div>
+
+    <div class="container">
+      <h1>SoulLog 🌙</h1>
+      <p>Welcome to your safe space</p>
+
+      <form onsubmit="signUp(event)">
+        <input
+          type="text"
+          id="Username"
+          name="Username"
+          placeholder="Username"
+          required />
+        <input
+          type="password"
+          placeholder="Password"
+          id="Password"
+          name="Password"
+          required />
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          id="cpass"
+          name="cpass"
+          required />
+        <button type="submit">Sign Up</button>
+        <div class="login-text">
+          Already have an account? <a href="index.html">Log In</a>
+        </div>
+      </form>
+    </div>
+
+    <script src="scripts/signup.js">
+      // Add twinkling stars ✨
+    </script>
+  </body>
+</html>

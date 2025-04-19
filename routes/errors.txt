@@ -1,0 +1,4 @@
+UE=User Exists
+UDE=User does not Exist
+PM=Password mismatch
+DB=Databse Error

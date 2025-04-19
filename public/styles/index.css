@@ -1,0 +1,182 @@
+/* General Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Lora", serif;
+}
+
+/* Previous soothing gradient background */
+body {
+  height: 100vh;
+  background: radial-gradient(ellipse at top, #e0c3fc 0%, #8ec5fc 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Glowing floating shapes */
+.glow {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background: #ffffff44;
+  border-radius: 50%;
+  filter: blur(40px);
+  animation: float 12s ease-in-out infinite alternate;
+}
+
+.glow:nth-child(1) {
+  top: 10%;
+  left: 12%;
+  animation-delay: 0s;
+}
+
+.glow:nth-child(2) {
+  bottom: 12%;
+  right: 15%;
+  animation-delay: 2s;
+}
+
+.glow:nth-child(3) {
+  top: 45%;
+  right: 22%;
+  animation-delay: 4s;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px) scale(1);
+  }
+  100% {
+    transform: translateY(-30px) scale(1.1);
+  }
+}
+
+/* Main container styling */
+.container {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+  animation: slideFade 1s ease;
+  width: 350px;
+}
+
+@keyframes slideFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header text styling */
+h1 {
+  text-align: center;
+  font-size: 2.8em;
+  color: #ffffff;
+  margin-bottom: 10px;
+  font-weight: 700;
+  text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Paragraph styling */
+p {
+  text-align: center;
+  color: #ffffff;
+  font-size: 1.2em;
+  margin-bottom: 30px;
+  text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Input Fields styling */
+input {
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  font-size: 1em;
+  transition: 0.3s ease;
+  background: #ffffffb3;
+  color: #444;
+}
+
+input::placeholder {
+  color: #999;
+}
+
+input:focus {
+  background: #ffffffcc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Button styling */
+button {
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  background: #6a0dad;
+  color: white;
+  font-weight: 600;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #7f00ff;
+  box-shadow: 0 0 15px #7f00ff;
+}
+
+/* Sign-up text */
+.signup-text {
+  text-align: center;
+  color: #ddd;
+  margin-top: 15px;
+  font-size: 1em;
+  text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.signup-text a {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+/* Floating stars */
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 2s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+}
+
+/* Font and font family */
+@import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;600&display=swap");

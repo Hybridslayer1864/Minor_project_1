@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SoulLog Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a2e0e6fd5b.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@3/tsparticles.bundle.min.js"></script>
+  <style>
+    :root {
+      --bg-light-1: #f9e6f0;
+      --bg-light-2: #d0e6f6;
+      --bg-dark-1: #1e1e2f;
+      --bg-dark-2: #2c3e50;
+      --text-light: #333;
+      --text-dark: #f1f1f1;
+      --card-bg-light: white;
+      --card-bg-dark: #2e3b55;
+    }
+
+    html[data-theme="dark"] {
+      --bg1: var(--bg-dark-1);
+      --bg2: var(--bg-dark-2);
+      --text: var(--text-dark);
+      --card-bg: var(--card-bg-dark);
+    }
+
+    html[data-theme="light"], html:not([data-theme]) {
+      --bg1: var(--bg-light-1);
+      --bg2: var(--bg-light-2);
+      --text: var(--text-light);
+      --card-bg: var(--card-bg-light);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(270deg, var(--bg1), var(--bg2));
+      background-size: 400% 400%;
+      animation: bgScroll 15s ease infinite;
+      color: var(--text);
+      padding: 30px 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    @keyframes bgScroll {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    #tsparticles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .bubbles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .bubbles span {
+      position: absolute;
+      display: block;
+      width: 20px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      animation: floatBubbles 20s linear infinite;
+      bottom: -50px;
+    }
+
+    @keyframes floatBubbles {
+      0% { transform: translateY(0) scale(1); opacity: 0.3; }
+      100% { transform: translateY(-1000px) scale(1.5); opacity: 0; }
+    }
+
+    .bubbles span:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 18s; }
+    .bubbles span:nth-child(2) { left: 20%; animation-delay: 2s; animation-duration: 22s; width: 25px; height: 25px; }
+    .bubbles span:nth-child(3) { left: 30%; animation-delay: 4s; animation-duration: 20s; }
+    .bubbles span:nth-child(4) { left: 40%; animation-delay: 1s; animation-duration: 24s; width: 30px; height: 30px; }
+    .bubbles span:nth-child(5) { left: 50%; animation-delay: 3s; animation-duration: 19s; }
+    .bubbles span:nth-child(6) { left: 60%; animation-delay: 5s; animation-duration: 21s; width: 22px; height: 22px; }
+    .bubbles span:nth-child(7) { left: 70%; animation-delay: 0s; animation-duration: 23s; width: 28px; height: 28px; }
+    .bubbles span:nth-child(8) { left: 80%; animation-delay: 2s; animation-duration: 20s; }
+    .bubbles span:nth-child(9) { left: 90%; animation-delay: 4s; animation-duration: 22s; }
+    .bubbles span:nth-child(10) { left: 95%; animation-delay: 6s; animation-duration: 25s; width: 26px; height: 26px; }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 30px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .greeting {
+      font-size: 1.4rem;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .quote {
+      font-size: 1.2rem;
+      font-style: italic;
+      text-align: center;
+      color: #6c5ce7;
+      flex: 2;
+    }
+
+    .profile-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .profile img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #6c5ce7;
+    }
+
+    .profile-name {
+      font-weight: bold;
+    }
+
+    .toggle {
+      background: #6c5ce7;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 3rem;
+      margin-top: 20px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .calendar, .mood {
+      text-align: center;
+      font-size: 1.1rem;
+      margin: 5px 0;
+      z-index: 1;
+      position: relative;
+    }
+
+    .dashboard {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+      margin-top: 30px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .dashboard .row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 25px;
+    }
+
+    .dashboard .row-bottom {
+      margin-top: 10px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 25px;
+      padding: 40px 30px;
+      text-align: center;
+      width: 300px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: fadeIn 0.5s ease;
+      cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 30px rgba(0,0,0,0.15);
+    }
+
+    .card i {
+      font-size: 3.5rem;
+      color: #6c5ce7;
+      margin-bottom: 15px;
+    }
+
+    .card h2 {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-size: 1.1rem;
+      opacity: 0.85;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9rem;
+      opacity: 0.6;
+      margin-top: 40px;
+      z-index: 1;
+      position: relative;
+    }
+
+    @media (max-width: 768px) {
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .quote {
+        order: 2;
+        text-align: left;
+        width: 100%;
+      }
+      .card {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="tsparticles"></div>
+  <div class="bubbles">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <div class="topbar">
+    <div class="greeting" id="greetingText">Good day!</div>
+    <div class="quote" id="quote">"Your daily inspiration here..."</div>
+    <div class="profile-wrap">
+      <div class="profile">
+        <img src="https://i.pravatar.cc/100?img=15" alt="Profile">
+        <span class="profile-name" id="username">SoulMate</span>
+      </div>
+      <button class="toggle" onclick="toggleTheme()">Toggle Theme</button>
+    </div>
+  </div>
+
+  <h1>Welcome back <span>👋</span></h1>
+  <p class="calendar" id="calendar"></p>
+  <p class="mood">🌼 Mood of the Day: Calm & Present</p>
+
+  <div class="dashboard">
+    <div class="row">
+      <div class="card" onclick="location.href='journal.html'">
+        <i class="fas fa-book-open"></i>
+        <h2>Journal</h2>
+        <p>Write, reflect, and grow.</p>
+      </div>
+      <div class="card" onclick="location.href='chat.html'">
+        <i class="fas fa-robot"></i>
+        <h2>AI Vent</h2>
+        <p>Let your thoughts flow freely.</p>
+      </div>
+      <div class="card" onclick="location.href='todo.html'">
+        <i class="fas fa-check-square"></i>
+        <h2>To‑Do List</h2>
+        <p>Stay productive & mindful.</p>
+      </div>
+    </div>
+    <div class="row row-bottom">
+      <div class="card" onclick="window.open('https://calendar.google.com/', '_blank')">
+        <i class="fas fa-calendar-alt"></i>
+        <h2>My Calendar</h2>
+        <p>Keep track of your journey.</p>
+      </div>
+      <div class="card" onclick="location.href='mood.html'">
+        <i class="fas fa-heartbeat"></i>
+        <h2>Mood Tracker</h2>
+        <p>Discover your emotional rhythm.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">SoulLog — Your peaceful space 🌿</div>
+
+  <script>
+    const name = "SoulMate";
+    document.getElementById("username").textContent = name;
+
+    const hour = new Date().getHours();
+    const greet = hour < 12
+      ? `🌞 Good Morning, ${name}!`
+      : hour < 18
+        ? `🌤️ Good Afternoon, ${name}!`
+        : `🌙 Good Evening, ${name}!`;
+    document.getElementById("greetingText").textContent = greet;
+
+    const quotes = [
+      "Every storm runs out of rain 🌈",
+      "Progress, not perfection 🛤️",
+      "You are more than your thoughts 🌻",
+      "One step at a time is all it takes 👣",
+      "Your feelings are valid 💖",
+      "Pause. Breathe. Reflect. 🧘",
+      "Your story matters 📖",
+      "Healing isn’t linear 🌱",
+      "It's okay to rest ⛅",
+      "You’re doing your best — and that’s enough 💛"
+    ];
+    document.getElementById("quote").textContent = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+
+    document.getElementById("calendar").textContent = `📅 ${new Date().toDateString()}`;
+
+    const root = document.documentElement;
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    function applyTheme(mode) {
+      root.setAttribute('data-theme', mode);
+      localStorage.setItem('theme', mode);
+    }
+    function toggleTheme() {
+      applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    }
+    window.onload = () => {
+      applyTheme(localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light'));
+    };
+
+    tsParticles.load("tsparticles", {
+      fullScreen: { enable: false },
+      background: { color: "transparent" },
+      particles: {
+        number: { value: 50 },
+        color: { value: "#a0c4ff" },
+        shape: { type: "circle" },
+        opacity: {
+          value: 0.3,
+          anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
+        },
+        size: {
+          value: { min: 4, max: 8 },
+          anim: { enable: true, speed: 2, size_min: 2, sync: false }
+        },
+        move: {
+          enable: true,
+          speed: 0.6,
+          direction: "top",
+          random: true,
+          straight: false,
+          outModes: "out"
+        }
+      }
+    });
+  </script>
+</body>
+</html>
