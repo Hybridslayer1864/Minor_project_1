@@ -12,10 +12,12 @@ const db=mysql.createConnection({
 });
 router.use(express.json());
 router.use(cors());
+router.use(express.static(path.join(__dirname,'public')));
 
 router.get('/', (req, res) => {
-    res.render('dashboard'); // no .ejs extension needed
-    
-  });
+  res.sendFile(path.join(__dirname, '..', 'public', 'dashboard.html'));
+
+  })
+
   
 module.exports=router;
