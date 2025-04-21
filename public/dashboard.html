@@ -1,154 +1,61 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SoulLog Dashboard</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap"
-      rel="stylesheet" />
-    <script
-      src="https://kit.fontawesome.com/a2e0e6fd5b.js"
-      crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles@3/tsparticles.bundle.min.js"></script>
     <link rel="stylesheet" href="styles/dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   </head>
   <body>
-    <div id="tsparticles"></div>
     <div class="bubbles">
-      <span></span><span></span><span></span><span></span><span></span>
-      <span></span><span></span><span></span><span></span><span></span>
+      <span style="left: 10%; animation-delay: 0s"></span>
+      <span style="left: 25%; animation-delay: 3s"></span>
+      <span style="left: 50%; animation-delay: 6s"></span>
+      <span style="left: 75%; animation-delay: 2s"></span>
+      <span style="left: 90%; animation-delay: 4s"></span>
     </div>
 
-    <div class="topbar">
-      <div class="greeting" id="greetingText">Good day!</div>
-      <div class="quote" id="quote">"Your daily inspiration here..."</div>
-      <div class="profile-wrap">
-        <div class="profile">
-          <img src="https://i.pravatar.cc/100?img=15" alt="Profile" />
-          <span class="profile-name" id="username">SoulMate</span>
-        </div>
-        <button class="toggle" onclick="toggleTheme()">Toggle Theme</button>
+    <div class="header">
+      <h1 id="greeting">Hello!</h1>
+      <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
       </div>
     </div>
 
-    <h1>Welcome back <span>👋</span></h1>
-    <p class="calendar" id="calendar"></p>
-    <p class="mood">🌼 Mood of the Day: Calm & Present</p>
+    <div class="main-content">
+      <p class="quote" id="quote">"You are magic wrapped in stardust."</p>
+    </div>
 
-    <div class="dashboard">
-      <div class="row">
-        <div class="card" onclick="location.href='journal.html'">
-          <i class="fas fa-book-open"></i>
-          <h2>Journal</h2>
-          <p>Write, reflect, and grow.</p>
-        </div>
-        <div class="card" onclick="location.href='chat.html'">
-          <i class="fas fa-robot"></i>
-          <h2>AI Vent</h2>
-          <p>Let your thoughts flow freely.</p>
-        </div>
-        <div class="card" onclick="location.href='todo.html'">
-          <i class="fas fa-check-square"></i>
-          <h2>To‑Do List</h2>
-          <p>Stay productive & mindful.</p>
-        </div>
+    <div class="card-grid">
+      <div class="card" onclick="navigate('journal')">
+        <i class="fas fa-book"></i>
+        <span>Journal</span>
       </div>
-      <div class="row row-bottom">
-        <div
-          class="card"
-          onclick="window.open('https://calendar.google.com/', '_blank')">
-          <i class="fas fa-calendar-alt"></i>
-          <h2>My Calendar</h2>
-          <p>Keep track of your journey.</p>
-        </div>
-        <div class="card" onclick="location.href='mood.html'">
-          <i class="fas fa-heartbeat"></i>
-          <h2>Mood Tracker</h2>
-          <p>Discover your emotional rhythm.</p>
-        </div>
+      <div class="card" onclick="navigate('todo')">
+        <i class="fas fa-check-circle"></i>
+        <span>To-Do</span>
+      </div>
+      <!--<div class="card" onclick="navigate('chat')">
+        <i class="fas fa-comments"></i>
+        <span>Chat</span>
+      </div>-->
+      <div class="card" onclick="navigate('calendar')">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Calendar</span>
+      </div>
+      <div class="card" onclick="navigate('mood')">
+        <i class="fas fa-heart"></i>
+        <span>Mood Tracker</span>
+      </div>
+      <div class="card" onclick="navigate('pomodoro')">
+        <i class="fas fa-clock"></i>
+        <span>Pomodoro</span>
       </div>
     </div>
 
-    <div class="footer">SoulLog — Your peaceful space 🌿</div>
-
-    <script>
-      const name = "SoulMate";
-      document.getElementById("username").textContent = name;
-
-      const hour = new Date().getHours();
-      const greet =
-        hour < 12
-          ? `🌞 Good Morning, ${name}!`
-          : hour < 18
-          ? `🌤️ Good Afternoon, ${name}!`
-          : `🌙 Good Evening, ${name}!`;
-      document.getElementById("greetingText").textContent = greet;
-
-      const quotes = [
-        "Every storm runs out of rain 🌈",
-        "Progress, not perfection 🛤️",
-        "You are more than your thoughts 🌻",
-        "One step at a time is all it takes 👣",
-        "Your feelings are valid 💖",
-        "Pause. Breathe. Reflect. 🧘",
-        "Your story matters 📖",
-        "Healing isn’t linear 🌱",
-        "It's okay to rest ⛅",
-        "You’re doing your best — and that’s enough 💛",
-      ];
-      document.getElementById("quote").textContent = `"${
-        quotes[Math.floor(Math.random() * quotes.length)]
-      }"`;
-
-      document.getElementById(
-        "calendar"
-      ).textContent = `📅 ${new Date().toDateString()}`;
-
-      const root = document.documentElement;
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      function applyTheme(mode) {
-        root.setAttribute("data-theme", mode);
-        localStorage.setItem("theme", mode);
-      }
-      function toggleTheme() {
-        applyTheme(
-          root.getAttribute("data-theme") === "dark" ? "light" : "dark"
-        );
-      }
-      window.onload = () => {
-        applyTheme(
-          localStorage.getItem("theme") || (prefersDark ? "dark" : "light")
-        );
-      };
-
-      tsParticles.load("tsparticles", {
-        fullScreen: { enable: false },
-        background: { color: "transparent" },
-        particles: {
-          number: { value: 50 },
-          color: { value: "#a0c4ff" },
-          shape: { type: "circle" },
-          opacity: {
-            value: 0.3,
-            anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false },
-          },
-          size: {
-            value: { min: 4, max: 8 },
-            anim: { enable: true, speed: 2, size_min: 2, sync: false },
-          },
-          move: {
-            enable: true,
-            speed: 0.6,
-            direction: "top",
-            random: true,
-            straight: false,
-            outModes: "out",
-          },
-        },
-      });
-    </script>
+    <script src="scripts/dashboard.js"></script>
   </body>
 </html>

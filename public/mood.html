@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SoulLog – Mood Tracker</title>
+    <link rel="stylesheet" href="styles/index.css" />
+    <style>
+      .page-wrapper {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        background: radial-gradient(ellipse at top, #f9e6f0 0%, #d0e6f6 100%);
+      }
+
+      .mood-container {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 500px;
+        text-align: center;
+        z-index: 2;
+        animation: slideFade 1s ease;
+      }
+
+      .mood-container h2 {
+        color: white;
+        margin-bottom: 20px;
+        font-size: 2.2em;
+        text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .mood-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+      }
+
+      .mood-option {
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .mood-option:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .mood-option.selected {
+        border: 3px solid #6a0dad;
+        box-shadow: 0 0 15px #6a0dad;
+        background: rgba(255, 255, 255, 0.6);
+      }
+
+      .save-msg {
+        margin-top: 15px;
+        color: #ffffffdd;
+        font-size: 0.95rem;
+        min-height: 1.2em;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Twinkling stars -->
+    <script>
+      for (let i = 0; i < 80; i++) {
+        const star = document.createElement("div");
+        star.className = "star";
+        star.style.top = Math.random() * 100 + "%";
+        star.style.left = Math.random() * 100 + "%";
+        star.style.animationDuration = Math.random() * 2 + 1 + "s";
+        document.body.appendChild(star);
+      }
+    </script>
+
+    <!-- Glowing blobs -->
+    <div class="glow"></div>
+    <div class="glow"></div>
+    <div class="glow"></div>
+
+    <div class="page-wrapper">
+      <div class="mood-container">
+        <h2>🌟 Mood Tracker</h2>
+        <div class="mood-grid" id="moodGrid">
+          <!-- JS will inject mood options here -->
+        </div>
+        <div class="save-msg" id="saveMsg"></div>
+      </div>
+    </div>
+
+    <script>
+      const moods = [
+        { label: "😄", name: "Happy" },
+        { label: "😊", name: "Content" },
+        { label: "😐", name: "Neutral" },
+        { label: "😔", name: "Sad" },
+        { label: "😟", name: "Anxious" },
+        { label: "😡", name: "Angry" },
+      ];
+
+      const grid = document.getElementById("moodGrid");
+      const saveMsg = document.getElementById("saveMsg");
+      const todayKey = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+
+      function renderMoods() {
+        grid.innerHTML = "";
+        const saved = localStorage.getItem("mood-" + todayKey);
+        moods.forEach((mood) => {
+          const div = document.createElement("div");
+          div.className = "mood-option";
+          div.textContent = mood.label;
+          if (saved === mood.name) {
+            div.classList.add("selected");
+            saveMsg.textContent = `You logged "${mood.name}" today`;
+          }
+          div.onclick = () => selectMood(mood);
+          grid.appendChild(div);
+        });
+      }
+
+      function selectMood(mood) {
+        localStorage.setItem("mood-" + todayKey, mood.name);
+        saveMsg.textContent = `You logged "${mood.name}" today`;
+        renderMoods(); // re-render to update selected styling
+        setTimeout(() => {
+          window.location.href = "/dashboard"; // Redirect to the dashboard after a slight delay
+        }, 500); // Slight delay to give the user feedback before redirecting
+      }
+
+      renderMoods();
+    </script>
+  </body>
+</html>

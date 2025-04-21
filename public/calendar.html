@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SoulLog - Calendar</title>
+    <link rel="stylesheet" href="styles/index.css" />
+    <style>
+      .page-wrapper {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        background: radial-gradient(ellipse at top, #fbc2eb 0%, #a6c1ee 100%);
+      }
+
+      .calendar-container {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 700px;
+        text-align: center;
+        z-index: 2;
+        animation: slideFade 1s ease;
+      }
+
+      .calendar-container h2 {
+        color: white;
+        margin-bottom: 15px;
+        font-size: 2.2em;
+        text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .day,
+      .date {
+        color: white;
+        padding: 10px;
+        border-radius: 10px;
+        font-weight: bold;
+      }
+
+      .day {
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      .date {
+        background: rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+        transition: background 0.2s ease;
+        position: relative;
+      }
+
+      .date:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      .selected {
+        background: #fff !important;
+        color: #333 !important;
+      }
+
+      .dot {
+        width: 6px;
+        height: 6px;
+        background: #ff69b4;
+        border-radius: 50%;
+        position: absolute;
+        bottom: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      /* Modal Styling */
+      .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.4);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+        display: none;
+      }
+
+      .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        width: 300px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        text-align: left;
+      }
+
+      .modal-content h3 {
+        margin-top: 0;
+        font-size: 1.3em;
+      }
+
+      .modal-content input,
+      .modal-content textarea {
+        width: 100%;
+        margin: 10px 0;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+      }
+
+      .modal-content button {
+        background: #a6c1ee;
+        color: white;
+        border: none;
+        padding: 8px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+
+      .modal-content button:hover {
+        background: #8caef5;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Stars -->
+    <script>
+      for (let i = 0; i < 80; i++) {
+        const star = document.createElement("div");
+        star.className = "star";
+        star.style.top = Math.random() * 100 + "%";
+        star.style.left = Math.random() * 100 + "%";
+        star.style.animationDuration = Math.random() * 2 + 1 + "s";
+        document.body.appendChild(star);
+      }
+    </script>
+
+    <!-- Glows -->
+    <div class="glow"></div>
+    <div class="glow"></div>
+    <div class="glow"></div>
+
+    <div class="page-wrapper">
+      <div class="calendar-container">
+        <h2>📅 My Calendar</h2>
+        <div class="calendar" id="calendar">
+          <div class="day">Sun</div>
+          <div class="day">Mon</div>
+          <div class="day">Tue</div>
+          <div class="day">Wed</div>
+          <div class="day">Thu</div>
+          <div class="day">Fri</div>
+          <div class="day">Sat</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+      <div class="modal-content">
+        <h3>Add Event for <span id="selectedDateText"></span></h3>
+        <input type="text" id="eventTitle" placeholder="Event title" />
+        <textarea id="eventDesc" placeholder="Details..." rows="3"></textarea>
+        <button onclick="saveEvent()">Save</button>
+      </div>
+    </div>
+
+    <script>
+      const calendar = document.getElementById("calendar");
+      const modal = document.getElementById("modal");
+      const selectedDateText = document.getElementById("selectedDateText");
+      let selectedDate = "";
+
+      function getKey(year, month, day) {
+        return `${year}-${month + 1}-${day}`;
+      }
+
+      function generateCalendar(year, month) {
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        document.querySelectorAll(".date").forEach((e) => e.remove());
+
+        for (let i = 0; i < firstDay; i++) {
+          const emptyCell = document.createElement("div");
+          calendar.appendChild(emptyCell);
+        }
+
+        for (let day = 1; day <= daysInMonth; day++) {
+          const dateCell = document.createElement("div");
+          dateCell.classList.add("date");
+          dateCell.textContent = day;
+
+          const key = getKey(year, month, day);
+          const eventData = localStorage.getItem(key);
+          if (eventData) {
+            const dot = document.createElement("div");
+            dot.classList.add("dot");
+            dateCell.appendChild(dot);
+          }
+
+          dateCell.onclick = () => {
+            selectedDate = key;
+            selectedDateText.textContent = `${day}/${month + 1}/${year}`;
+            modal.style.display = "flex";
+
+            // Prefill existing data
+            const existing = JSON.parse(localStorage.getItem(key) || "{}");
+            document.getElementById("eventTitle").value = existing.title || "";
+            document.getElementById("eventDesc").value = existing.desc || "";
+          };
+
+          calendar.appendChild(dateCell);
+        }
+      }
+
+      function saveEvent() {
+        const title = document.getElementById("eventTitle").value.trim();
+        const desc = document.getElementById("eventDesc").value.trim();
+
+        if (title) {
+          localStorage.setItem(selectedDate, JSON.stringify({ title, desc }));
+          modal.style.display = "none";
+          generateCalendar(new Date().getFullYear(), new Date().getMonth());
+        }
+      }
+
+      window.onclick = (e) => {
+        if (e.target === modal) modal.style.display = "none";
+      };
+
+      const today = new Date();
+      generateCalendar(today.getFullYear(), today.getMonth());
+    </script>
+  </body>
+</html>

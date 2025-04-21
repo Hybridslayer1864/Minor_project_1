@@ -6,25 +6,32 @@ const session = require('express-session');
 
 const loginRoute = require('./routes/login');
 const signupRoute = require('./routes/signup');
-const dashboard=require('./routes/dashboard');
+const dashboard = require('./routes/dashboard');
 
 app.use(express.json());
 app.use(cors());
 app.use(session({
-  secret: 'your-secret-key',   // A secret key to sign the session cookie
-  resave: false,               // Don't save session if not modified
-  saveUninitialized: true,     // Save the session even if it's not initialized
-  cookie: { secure: false }    // For HTTP, set secure: false (set to true for HTTPS)
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
 }));
+
 // Serve static files from 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Mount routes
+// Ensure welcome page route is first
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "welcome.html"));
+});
+
+// Other routes
 app.use('/login', loginRoute);
 app.use('/signup', signupRoute);
-app.use('/dashboard',dashboard);
+app.use('/dashboard', dashboard);
+
 app.listen(3000, (err) => {
   if (err) {
     console.log("Error starting server");

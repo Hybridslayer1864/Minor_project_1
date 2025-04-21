@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SoulLog - Pomodoro</title>
+    <link rel="stylesheet" href="styles/index.css" />
+    <style>
+      .pomodoro-container {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 500px;
+        text-align: center;
+        z-index: 2;
+        animation: slideFade 1s ease;
+      }
+
+      .pomodoro-container h2 {
+        color: white;
+        margin-bottom: 15px;
+        font-size: 2.2em;
+        text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      #timer {
+        font-size: 3em;
+        margin: 20px 0;
+        color: #fff;
+        text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .controls button {
+        margin: 0 10px;
+        padding: 10px 20px;
+        font-size: 1.1em;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background: #fff;
+        color: #333;
+      }
+
+      .controls button:hover {
+        background: #eee;
+      }
+
+      .page-wrapper {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        background: radial-gradient(ellipse at top, #fbc2eb 0%, #a6c1ee 100%);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Floating stars background -->
+    <script>
+      for (let i = 0; i < 80; i++) {
+        const star = document.createElement("div");
+        star.className = "star";
+        star.style.top = Math.random() * 100 + "%";
+        star.style.left = Math.random() * 100 + "%";
+        star.style.animationDuration = Math.random() * 2 + 1 + "s";
+        document.body.appendChild(star);
+      }
+    </script>
+
+    <!-- Glowing blobs -->
+    <div class="glow"></div>
+    <div class="glow"></div>
+    <div class="glow"></div>
+
+    <!-- Pomodoro Content -->
+    <div class="page-wrapper">
+      <div class="pomodoro-container">
+        <h2>Pomodoro Focus 🍅</h2>
+        <div id="timer">25:00</div>
+        <div class="controls">
+          <button onclick="startTimer()">Start</button>
+          <button onclick="pauseTimer()">Pause</button>
+          <button onclick="resetTimer()">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let timer;
+      let isRunning = false;
+      let minutes = 25;
+      let seconds = 0;
+
+      function updateDisplay() {
+        const mm = String(minutes).padStart(2, "0");
+        const ss = String(seconds).padStart(2, "0");
+        document.getElementById("timer").textContent = `${mm}:${ss}`;
+      }
+
+      function startTimer() {
+        if (isRunning) return;
+        isRunning = true;
+        timer = setInterval(() => {
+          if (seconds === 0) {
+            if (minutes === 0) {
+              clearInterval(timer);
+              alert("Time's up! 🌸 Take a break~");
+              return;
+            }
+            minutes--;
+            seconds = 59;
+          } else {
+            seconds--;
+          }
+          updateDisplay();
+        }, 1000);
+      }
+
+      function pauseTimer() {
+        isRunning = false;
+        clearInterval(timer);
+      }
+
+      function resetTimer() {
+        pauseTimer();
+        minutes = 25;
+        seconds = 0;
+        updateDisplay();
+      }
+
+      updateDisplay(); // initialize display
+    </script>
+  </body>
+</html>
