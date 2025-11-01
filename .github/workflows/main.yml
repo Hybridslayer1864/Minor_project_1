@@ -1,0 +1,16 @@
+name: CICD
+
+on:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      -name: checkout code
+       uses: actions/checkout@v2
+      -name: login to docker
+       uses: actions/login-action@v1
+       with:
+         username: ${{ secrets.DOCKERHUB_USER_NAME }}
+         password: ${{secrets.DOCKER_PASSCODE }}
